@@ -36,6 +36,7 @@
         <button id="startButton">Start</button>
         <button id="hangupButton">Hang Up</button>
     </div>
+    <p id="notEnabledWarning" style="font-weight: bold;display: inline;color: red;font-size: 1.5em;display:none">RtpTransport support not found - check your browser version and flags as described below.</p>
 
     <p style="font-weight: bold">NOTE: This is a very early prototype. Actual web apps should perform congestion control on workers, once that's supported.</p>
     <p>Requires a Chromium build >= <a style="font-weight: bold">128.0.6564.0</a> started with the flags <a style="font-family: monospace;">--force-fieldtrials=WebRTC-Bwe-InjectedCongestionController/Enabled --enable-blink-features=RTCRtpTransport</a></p>

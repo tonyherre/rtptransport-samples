@@ -1,6 +1,12 @@
 let googcc;
 let module;
 async function startgoogcc() {
+  if (!('rtpTransport' in RTCPeerConnection.prototype)) {
+    document.getElementById("notEnabledWarning").style.display = 'inline';
+    document.getElementById("startButton").disabled = true;
+    return;
+  }
+
   const wasmResponse = await fetch('googcc/build/googcc.wasm');
 
   let data = await wasmResponse.arrayBuffer();
