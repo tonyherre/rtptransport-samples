@@ -1,0 +1,1 @@
+Building wasm_googcc.cc into an emscripten WASM bundle, as in build/, is left as an exercise for the reader.

@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8">
+    <meta name="description" content="WebRTC code samples">
+    <meta name="viewport" content="width=device-width, user-scalable=yes, initial-scale=1, maximum-scale=1">
+    <meta itemprop="description" content="Client-side WebRTC code samples">
+    <meta itemprop="image" content="../../../images/webrtc-icon-192x192.png">
+    <meta itemprop="name" content="WebRTC code samples">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta id="theme-color" name="theme-color" content="#ffffff">
+
+    <base target="_blank">
+
+    <title>WASM GoogCC</title>
+
+    <link rel="icon" sizes="192x192" href="../../../images/webrtc-icon-192x192.png">
+    <link href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700" rel="stylesheet" type="text/css">
+    <link rel="stylesheet" href="../../../css/main.css"/>
+    <link rel="stylesheet" href="css/main.css"/>
+</head>
+
+<body>
+
+<div id="container">
+    <h1>WASM Congestion Control using RtpTransport</h1>
+
+    <p>Sample running WASM-compiled GoogCC BWE on a live loopback PeerConnection via the
+      <a href="https://github.com/w3c/webrtc-rtptransport"> experimental RtpTransport APIs</a>.
+    </p>
+
+    <video id="localVideo" playsinline autoplay muted></video>
+    <video id="remoteVideo" playsinline autoplay></video>
+
+    <div class="box">
+        <button id="startButton">Start</button>
+        <button id="hangupButton">Hang Up</button>
+    </div>
+
+    <p style="font-weight: bold">NOTE: This is a very early prototype. Actual web apps should perform congestion control on workers, once that's supported.</p>
+    <p>Requires a Chromium build >= <a style="font-weight: bold">128.0.6564.0</a> started with the flags <a style="font-family: monospace;">--force-fieldtrials=WebRTC-Bwe-InjectedCongestionController/Enabled --enable-blink-features=RTCRtpTransport</a></p>
+    <p>See googcc_runner.js for the interesting JS code making use of RtpTransport.</p>
+</div>
+
+<script src="main.js" async></script>
+<script src="googcc_runner.js"></script>
+
+
+<script src="googcc/build/googcc.js"></script>
+</body>
+</html>
