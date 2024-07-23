@@ -19,11 +19,16 @@ struct TargetTransferRate {
 
 class PacketResult {
 public:
-  PacketResult(long received_time_millis, long sequence_number, long sent_time_millis) : received_time_millis_(received_time_millis), sequence_number_(sequence_number), sent_time_millis_(sent_time_millis) {}
+  PacketResult(long received_time_millis, long sequence_number, long sent_time_millis, long sent_size) :
+      received_time_millis_(received_time_millis),
+      sequence_number_(sequence_number),
+      sent_time_millis_(sent_time_millis),
+      sent_size_(sent_size) {}
 
   long received_time_millis_;
   long sequence_number_;
   long sent_time_millis_;
+  long sent_size_;
 };
 
 class GoogCCWrapper {
@@ -71,6 +76,7 @@ class GoogCCWrapper {
       webrtc::SentPacket sent_packet;
       sent_packet.sequence_number = packet_result.sequence_number_;
       sent_packet.send_time = webrtc::Timestamp::Millis(packet_result.sent_time_millis_);
+      sent_packet.size = webrtc::DataSize::Bytes(packet_result.sent_size_);
       packet_result_webrtc.sent_packet = sent_packet;
       packet_results_webrtc.push_back(packet_result_webrtc);
     }
@@ -108,7 +114,7 @@ class GoogCCWrapper {
 EMSCRIPTEN_BINDINGS(googcc) {
   emscripten::register_vector<PacketResult>("PacketResultVector");
   emscripten::class_<PacketResult>("PacketResult")
-      .constructor<long, long, long>();
+      .constructor<long, long, long, long>();
   emscripten::value_object<TargetTransferRate>("TargetTransferRate")
       .field("at_time", &TargetTransferRate::at_time)
       .field("target_rate_bps", &TargetTransferRate::target_rate_bps)

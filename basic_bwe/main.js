@@ -38,7 +38,7 @@ let localStream;
 let pc1;
 let pc2;
 const offerOptions = {
-  offerToReceiveAudio: 1,
+  offerToReceiveAudio: 0,
   offerToReceiveVideo: 1
 };
 
@@ -54,7 +54,7 @@ async function start() {
   console.log('Requesting local stream');
   startButton.disabled = true;
   try {
-    const stream = await navigator.mediaDevices.getUserMedia({audio: true, video: true});
+    const stream = await navigator.mediaDevices.getUserMedia({audio: false, video: true});
     console.log('Received local stream');
     localVideo.srcObject = stream;
     localStream = stream;
@@ -62,7 +62,7 @@ async function start() {
     alert(`getUserMedia() error: ${e.name}`);
   }
   call();
-  setTimeout(runGoogcc, 1000);
+  setTimeout(runGoogcc, 2000);
 }
 
 async function call() {

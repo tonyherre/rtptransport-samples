@@ -23,6 +23,7 @@ async function runGoogcc() {
   runGoogccSentPackets();
   runGoogccFeedback();
   runGoogccProcessInterval();
+  runGoogccPacing();
 }
 
 // performance.now() + time_offset approximates now in the same clock as the
@@ -57,11 +58,10 @@ async function runGoogccFeedback() {
     feedbackPackets.forEach(packet => {
       const packetResults = new module.PacketResultVector();
       packet.acks().forEach(ack => {
-        let sentTime = 0;
         if (sentPacketMap.has(ack.ackId)) {
-          sentTime = sentPacketMap.get(ack.ackId).time;
+          let sentPacket = sentPacketMap.get(ack.ackId);
           sentPacketMap.delete(ack.ackId);
-          packetResults.push_back(new module.PacketResult(ack.remoteReceiveTimestamp, ack.ackId, sentTime));
+          packetResults.push_back(new module.PacketResult(ack.remoteReceiveTimestamp, ack.ackId, sentPacket.time, sentPacket.size));
         }
         if (ack.remoteReceiveTimestamp == 0) {
           console.log("ack.remoteReceiveTimestamp == 0");
@@ -90,3 +90,39 @@ async function runGoogccProcessInterval() {
 
 // Hey, ho, let's go!
 startgoogcc();
+
+
+async function runGoogccPacing() {
+  sendStream = await pc1.getSenders()[0].replaceSendStreams();
+
+  let packetBuffer = [];
+  // Read packets into packetBuffer.
+  (async () => {
+    let seqNum = 0;
+    while(true) {
+      let packets = sendStream.readPacketizedRtp(1000);
+      packets.forEach((packet) => {
+        let buffer = new ArrayBuffer(5000);
+        packet.copyPayloadTo(buffer);
+        packetBuffer.push({
+          sequenceNumber: seqNum++,
+          marker:packet.marker,
+          timestamp: packet.timestamp,
+          payloadType: packet.payloadType,
+          payload: new Uint8Array(buffer, 0, packet.payloadSize)
+        });
+      });
+      await new Promise((resolve) => setTimeout(resolve, 10));
+    }
+  })();
+
+  // Send them with our desired pacing.
+  while (true) {
+    packetBuffer.forEach((packet) => {
+      sendStream.sendRtp(packet, {});
+    });
+    packetBuffer = [];
+
+    await new Promise((resolve) => setTimeout(resolve, 200));
+  }
+}
