@@ -57,11 +57,10 @@ async function runGoogccFeedback() {
     feedbackPackets.forEach(packet => {
       const packetResults = new module.PacketResultVector();
       packet.acks().forEach(ack => {
-        let sentTime = 0;
         if (sentPacketMap.has(ack.ackId)) {
-          sentTime = sentPacketMap.get(ack.ackId).time;
+          let sentPacket = sentPacketMap.get(ack.ackId);
           sentPacketMap.delete(ack.ackId);
-          packetResults.push_back(new module.PacketResult(ack.remoteReceiveTimestamp, ack.ackId, sentTime));
+          packetResults.push_back(new module.PacketResult(ack.remoteReceiveTimestamp, ack.ackId, sentPacket.time, sentPacket.size));
         }
         if (ack.remoteReceiveTimestamp == 0) {
           console.log("ack.remoteReceiveTimestamp == 0");
