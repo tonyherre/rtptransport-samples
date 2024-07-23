@@ -18,8 +18,10 @@ const sentPacketMap = new Map();
 
 const maxPackets = 100;
 async function runGoogcc() {
-  let rtpTransport = pc1.rtpTransport;
-
+  if (!pc1 || !pc1.rtpTransport) {
+    console.log("NO PC1 or transport");
+    return;
+  }
   runGoogccSentPackets();
   runGoogccFeedback();
   runGoogccProcessInterval();
