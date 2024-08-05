@@ -20,8 +20,8 @@
 <div id="container">
     <h1>WASM Congestion Control using RtpTransport</h1>
 
-    <p>Sample running WASM-compiled GoogCC BWE on a live loopback PeerConnection via the
-      <a href="https://github.com/w3c/webrtc-rtptransport"> experimental RtpTransport APIs</a>.
+    <p>Sample running WASM-compiled GoogCC BWE in a Worker on a live loopback PeerConnection via the
+      <a href="https://github.com/w3c/webrtc-rtptransport"> experimental RtpTransport API</a>.
     </p>
 
     <video id="localVideo" playsinline autoplay muted></video>
@@ -32,9 +32,7 @@
         <button id="hangupButton">Hang Up</button>
     </div>
     <p id="notEnabledWarning" style="font-weight: bold;display: inline;color: red;font-size: 1.5em;display:none">RtpTransport support not found - check your browser version and flags as described below.</p>
-
-    <p style="font-weight: bold">NOTE: This is a very early prototype. Actual web apps should perform congestion control on workers, once that's supported.</p>
-    <p>Requires a Chromium build >= <a style="font-weight: bold">128.0.6564.0</a> started with the flags <a style="font-family: monospace;">--force-fieldtrials=WebRTC-Bwe-InjectedCongestionController/Enabled --enable-blink-features=RTCRtpTransport</a></p>
+    <p>Requires a Chromium build >= <a style="font-weight: bold">129.0.6658.0</a> started with the flag <a style="font-family: monospace;">--enable-blink-features=RTCRtpTransport</a></p>
     <p>See googcc_runner.js for the interesting JS code making use of RtpTransport.</p>
 </div>
 

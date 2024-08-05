@@ -62,7 +62,6 @@ async function start() {
     alert(`getUserMedia() error: ${e.name}`);
   }
   call();
-  setTimeout(runGoogcc, 1000);
 }
 
 async function call() {
@@ -99,6 +98,7 @@ async function call() {
   } catch (e) {
     onCreateSessionDescriptionError(e);
   }
+  startGoogcc(pc1);
 }
 
 function onCreateSessionDescriptionError(error) {
