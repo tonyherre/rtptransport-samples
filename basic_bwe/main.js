@@ -62,7 +62,7 @@ async function start() {
     alert(`getUserMedia() error: ${e.name}`);
   }
   call();
-  setTimeout(runGoogcc, 100);
+  setTimeout(runGoogcc, 2000);
 }
 
 async function call() {
