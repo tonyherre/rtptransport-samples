@@ -12,14 +12,17 @@ async function startgoogcc() {
   let data = await wasmResponse.arrayBuffer();
   module = await loadGoogccWasm({wasm: data});
   googcc = new module.GoogCCWrapper();
+
+  // Give googCC a chance to ingest the initial config before it starts getting
+  // packet reports, otherwise it gets confused by the timestamps jumping
+  // backwards and crashes.
+  googcc.onProcessInterval(0);
 }
 
 const sentPacketMap = new Map();
 
 const maxPackets = 100;
 async function runGoogcc() {
-  let rtpTransport = pc1.rtpTransport;
-
   runGoogccSentPackets();
   runGoogccFeedback();
   runGoogccProcessInterval();
@@ -82,7 +85,9 @@ async function runGoogccProcessInterval() {
   let rtpTransport = pc1.rtpTransport;
 
   while (true) {
-    let newTargetRate = googcc.onProcessInterval(performance.now() + time_offset);
+    if (time_offset > 0) {
+      let newTargetRate = googcc.onProcessInterval(performance.now() + time_offset);
+    }
     await new Promise(resolve => setTimeout(resolve, 100));
   }
 }
